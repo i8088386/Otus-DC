@@ -20,7 +20,7 @@
 
 ```
 router ospf 1
-   router-id 10.0.254.102
+   router-id 10.0.254.101
 
 interface Ethernet1
    description Leaf-1
