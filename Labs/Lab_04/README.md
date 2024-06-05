@@ -208,6 +208,7 @@ Codes: C - connected, S - static, K - kernel,
 </details>
 <details>
 <summary>Проверка на LEAF1</summary>
+   
 ```
 Leaf-1#show ip bgp summary
 BGP summary information for VRF default
