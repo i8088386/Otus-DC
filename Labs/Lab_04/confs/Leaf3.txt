@@ -1,0 +1,67 @@
+Leaf-3#show run
+! Command: show running-config
+! device: Leaf-3 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname Leaf-3
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Spine-1
+   mtu 9000
+   no switchport
+   ip address 10.1.1.5/31
+!
+interface Ethernet2
+   description Spine-2
+   mtu 9000
+   no switchport
+   ip address 10.1.2.5/31
+!
+interface Ethernet3
+   description Client-3
+   mtu 9000
+!
+interface Ethernet4
+   description Client-4
+   mtu 9000
+!
+interface Ethernet5
+   mtu 9000
+!
+interface Ethernet6
+   mtu 9000
+!
+interface Ethernet7
+   mtu 9000
+!
+interface Loopback0
+   ip address 10.1.254.3/32
+!
+interface Management1
+!
+ip routing
+!
+ip prefix-list Loopback0 seq 10 permit 10.1.254.3/32
+!
+route-map Lo0 permit 10
+   match ip address prefix-list Loopback0
+!
+router bgp 65003
+   router-id 10.1.254.3
+   neighbor SPINE peer group
+   neighbor SPINE remote-as 65100
+   neighbor SPINE bfd
+   neighbor 10.1.1.4 peer group SPINE
+   neighbor 10.1.2.4 peer group SPINE
+   redistribute connected route-map Lo0
+!
+end
