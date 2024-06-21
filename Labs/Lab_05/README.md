@@ -27,7 +27,7 @@
 #### <u>Таблица VLAN/VNI RD/RT на устройствах:</u>
 
 |Device|VLAN|VNI|RD|RT|
-|:-:|:-:|:-:|
+|:-:|:-:|:-:|:-:|:-:|
 |Leaf1|10|100010|65001:10|10:100010|
 |Leaf2|20|100020|65002:20|20:100020|
 |Leaf3|10|100010|65003:10|10:100010|
@@ -352,6 +352,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 </details>
 <details>
 <summary>Проверка на LEAF1</summary>
+
 ```
 Leaf-1#show bgp evpn summary
 BGP summary information for VRF default
