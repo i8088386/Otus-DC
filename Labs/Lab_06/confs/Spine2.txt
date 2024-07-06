@@ -1,0 +1,82 @@
+! Command: show running-config
+! device: Spine-2 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname Spine-2
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Leaf-1
+   mtu 9000
+   no switchport
+   ip address 10.1.2.0/31
+!
+interface Ethernet2
+   description Leaf-2
+   mtu 9000
+   no switchport
+   ip address 10.1.2.2/31
+!
+interface Ethernet3
+   description Leaf-3
+   mtu 9000
+   no switchport
+   ip address 10.1.2.4/31
+!
+interface Ethernet4
+   no switchport
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Loopback0
+   ip address 10.1.254.102/32
+!
+interface Management1
+!
+ip routing
+!
+router bgp 65100
+   router-id 10.1.254.102
+   no bgp default ipv4-unicast
+   maximum-paths 4 ecmp 4
+   neighbor EVPN peer group
+   neighbor EVPN next-hop-unchanged
+   neighbor EVPN update-source Loopback0
+   neighbor EVPN bfd
+   neighbor EVPN ebgp-multihop 3
+   neighbor EVPN send-community extended
+   neighbor LEAF peer group
+   neighbor LEAF bfd
+   neighbor 10.1.2.1 peer group LEAF
+   neighbor 10.1.2.1 remote-as 65001
+   neighbor 10.1.2.3 peer group LEAF
+   neighbor 10.1.2.3 remote-as 65002
+   neighbor 10.1.2.5 peer group LEAF
+   neighbor 10.1.2.5 remote-as 65003
+   neighbor 10.1.254.1 peer group EVPN
+   neighbor 10.1.254.1 remote-as 65001
+   neighbor 10.1.254.2 peer group EVPN
+   neighbor 10.1.254.2 remote-as 65002
+   neighbor 10.1.254.3 peer group EVPN
+   neighbor 10.1.254.3 remote-as 65003
+   !
+   address-family evpn
+      neighbor EVPN activate
+   !
+   address-family ipv4
+      neighbor LEAF activate
+      network 10.1.254.102/32
+!
+end
