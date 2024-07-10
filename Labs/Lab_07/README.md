@@ -412,7 +412,7 @@ nve
 ### Проверка:
 
 <details>
-<summary>Проверка на LEAF1</summary>
+<summary>Проверка на Leaf-1</summary>
 
 ```
 
@@ -750,7 +750,7 @@ Gateway of last resort is not set
 ```
 </details>
 <details>
-<summary>Проверка на LEAF2</summary>
+<summary>Проверка на Leaf-2</summary>
 
 ```
 
@@ -1090,7 +1090,7 @@ Gateway of last resort is not set
 ```
 </details>
 <details>
-<summary>Проверка на LEAF3</summary>
+<summary>Проверка на Leaf-3</summary>
 
 ```
 
@@ -1433,7 +1433,7 @@ Gateway of last resort is not set
 ```
 </details>
 <details>
-<summary>Проверка на LEAF4</summary>
+<summary>Проверка на Leaf-4</summary>
 
 ```
 
@@ -1755,7 +1755,7 @@ Address         Age (sec)  Hardware Addr   Interface
 ```
 </details>
 <details>
-<summary>Проверка Leaf-5</summary>
+<summary>Проверка на Leaf-5</summary>
 
 ```
 Leaf-5-Dell# show vlt 1
