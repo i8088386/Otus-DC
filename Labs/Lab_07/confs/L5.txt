@@ -1,0 +1,366 @@
+Leaf-5-Dell# show running-configuration
+! Version 10.5.4.3
+! Last configuration change at Jul  09 21:51:59 2024
+!
+ip vrf default
+!
+ip vrf DEV
+!
+ip virtual-router mac-address 00:00:00:00:11:11
+iscsi target port 860
+iscsi target port 3260
+interface breakout 1/1/1 map 40g-1x
+interface breakout 1/1/2 map 40g-1x
+interface breakout 1/1/3 map 40g-1x
+interface breakout 1/1/4 map 40g-1x
+interface breakout 1/1/5 map 40g-1x
+interface breakout 1/1/6 map 40g-1x
+interface breakout 1/1/7 map 40g-1x
+interface breakout 1/1/8 map 40g-1x
+interface breakout 1/1/9 map 40g-1x
+interface breakout 1/1/10 map 40g-1x
+interface breakout 1/1/11 map 40g-1x
+interface breakout 1/1/12 map 40g-1x
+interface breakout 1/1/13 map 40g-1x
+interface breakout 1/1/14 map 40g-1x
+interface breakout 1/1/15 map 40g-1x
+interface breakout 1/1/16 map 40g-1x
+interface breakout 1/1/17 map 40g-1x
+interface breakout 1/1/18 map 40g-1x
+interface breakout 1/1/19 map 40g-1x
+interface breakout 1/1/20 map 40g-1x
+interface breakout 1/1/21 map 40g-1x
+interface breakout 1/1/22 map 40g-1x
+interface breakout 1/1/23 map 40g-1x
+interface breakout 1/1/24 map 40g-1x
+interface breakout 1/1/25 map 40g-1x
+interface breakout 1/1/26 map 40g-1x
+interface breakout 1/1/27 map 40g-1x
+interface breakout 1/1/28 map 40g-1x
+interface breakout 1/1/29 map 40g-1x
+interface breakout 1/1/30 map 40g-1x
+interface breakout 1/1/31 map 40g-1x
+interface breakout 1/1/32 map 40g-1x
+hostname Leaf-5-Dell
+system-user linuxadmin password ****
+username admin password **** role sysadmin priv-lvl 15
+aaa authentication login default local
+aaa authentication login console local
+!
+class-map type application class-iscsi
+!
+policy-map type application policy-iscsi
+!
+virtual-network 10
+!
+virtual-network 30
+!
+interface vlan1
+ no shutdown
+!
+interface vlan10
+ virtual-network 10
+ no shutdown
+!
+interface vlan30
+ virtual-network 30
+ no shutdown
+ ip vrf forwarding DEV
+!
+interface vlan4000
+ no shutdown
+ ip address 10.1.255.2/31
+!
+interface vlan4001
+ no shutdown
+ ip address 10.1.251.2/31
+!
+interface port-channel10
+ no shutdown
+ switchport mode trunk
+ switchport access vlan 1
+ switchport trunk allowed vlan 10,30
+ vlt-port-channel 10
+!
+interface loopback0
+ no shutdown
+ ip address 10.1.254.5/32
+!
+interface loopback1
+ no shutdown
+ ip address 10.1.254.204/32
+!
+nve
+ source-interface loopback1
+!
+interface mgmt1/1/1
+ no shutdown
+ ip address dhcp
+ ipv6 address autoconfig
+!
+interface ethernet1/1/1
+ description Spine-1
+ no shutdown
+ no switchport
+ ip address 10.1.1.9/31
+ flowcontrol receive off
+!
+interface ethernet1/1/2
+ description Spine-2
+ no shutdown
+ no switchport
+ ip address 10.1.2.9/31
+ flowcontrol receive off
+!
+interface ethernet1/1/3
+ description Servers-3
+ no shutdown
+ channel-group 10 mode active
+ no switchport
+ flowcontrol receive off
+!
+interface ethernet1/1/4
+ description VLTi
+ no shutdown
+ no switchport
+ flowcontrol receive off
+!
+interface ethernet1/1/5
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/6
+ description VLTi
+ no shutdown
+ no switchport
+ flowcontrol receive off
+!
+interface ethernet1/1/7
+ description VLTi
+ no shutdown
+ no switchport
+ flowcontrol receive off
+!
+interface ethernet1/1/8
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/9
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/10
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/11
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/12
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/13
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/14
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/15
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/16
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/17
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/18
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/19
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/20
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/21
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/22
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/23
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/24
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/25
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/26
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/27
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/28
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/29
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/30
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/31
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface ethernet1/1/32
+ no shutdown
+ switchport access vlan 1
+ flowcontrol receive off
+!
+interface virtual-network30
+ no shutdown
+ ip vrf forwarding DEV
+ ip address 172.16.30.205/24
+ ip virtual-router address 172.16.30.1
+!
+router bgp 65004
+ maximum-paths ebgp 4
+ router-id 10.1.254.5
+ !
+ address-family ipv4 unicast
+  network 10.1.254.5/32
+  network 10.1.254.204/32
+ !
+ neighbor 10.1.2.8
+  bfd
+  remote-as 65100
+  no shutdown
+  !
+  address-family ipv4 unicast
+ !
+ neighbor 10.1.254.102
+  ebgp-multihop 10
+  remote-as 65100
+  send-community extended
+  update-source loopback0
+  no shutdown
+  !
+  address-family ipv4 unicast
+   no activate
+  !
+  address-family l2vpn evpn
+   activate
+ !
+ neighbor 10.1.254.101
+  ebgp-multihop 10
+  remote-as 65100
+  send-community extended
+  update-source loopback0
+  no shutdown
+  !
+  address-family ipv4 unicast
+   no activate
+  !
+  address-family l2vpn evpn
+   activate
+ !
+ neighbor 10.1.1.8
+  bfd
+  remote-as 65100
+  no shutdown
+  !
+  address-family ipv4 unicast
+ !
+ neighbor 10.1.251.3
+  bfd
+  remote-as 65004
+  no shutdown
+ !
+ vrf DEV
+  !
+  address-family ipv4 unicast
+   redistribute l2vpn evpn
+!
+vlt-domain 1
+ discovery-interface ethernet1/1/6-1/1/7
+ vlt-mac aa:bb:cc:dd:ee:ff
+!
+evpn
+ !
+ evi 10
+  vni 100010
+  rd auto
+  route-target 10:100010 both
+ !
+ evi 30
+  vni 100030
+  rd auto
+  route-target 30:100030 both
+ !
+ vrf DEV
+  vni 999
+  rd 10.1.254.4:999
+  route-target 999:999 both
+  advertise ipv4 bgp
+!
+virtual-network 10
+ !
+ vxlan-vni 100010
+!
+virtual-network 30
+ !
+ vxlan-vni 100030
+!
+snmp-server contact "Contact Support"
+!
+telemetry

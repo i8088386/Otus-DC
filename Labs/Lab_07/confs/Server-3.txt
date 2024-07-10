@@ -1,0 +1,57 @@
+Server-3#sh run
+! Command: show running-config
+! device: Server-3 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname Server-3
+!
+spanning-tree mode mstp
+!
+vlan 10
+   name Mgmt
+!
+vlan 30
+   name Prod
+!
+vrf instance Mgmt
+!
+vrf instance Prod
+!
+interface Port-Channel10
+   switchport mode trunk
+!
+interface Ethernet1
+   channel-group 10 mode active
+!
+interface Ethernet2
+   channel-group 10 mode active
+!
+interface Ethernet3
+!
+interface Management1
+!
+interface Vlan10
+   no autostate
+   vrf Mgmt
+   ip address 172.16.10.133/24
+!
+interface Vlan30
+   no autostate
+   vrf Prod
+   ip address 172.16.30.133/24
+!
+no ip routing
+ip routing vrf Mgmt
+ip routing vrf Prod
+!
+ip route vrf Mgmt 0.0.0.0/0 172.16.10.1
+ip route vrf Prod 0.0.0.0/0 172.16.30.1
+!
+end

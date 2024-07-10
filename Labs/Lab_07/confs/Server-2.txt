@@ -1,0 +1,72 @@
+Server-2#ping vrf Test 172.16.30.133
+PING 172.16.30.133 (172.16.30.133) 72(100) bytes of data.
+
+--- 172.16.30.133 ping statistics ---
+5 packets transmitted, 0 received, 100% packet loss, time 42ms
+
+Server-2#sh run
+! Command: show running-config
+! device: Server-2 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname Server-2
+!
+spanning-tree mode mstp
+!
+vlan 10,20,30,40
+!
+vrf instance Mgmt
+!
+vrf instance Prod
+!
+vrf instance Test
+!
+interface Port-Channel10
+   switchport mode trunk
+!
+interface Ethernet1
+   channel-group 10 mode active
+!
+interface Ethernet2
+   channel-group 10 mode active
+!
+interface Ethernet3
+!
+interface Management1
+!
+interface Vlan10
+   no autostate
+   vrf Mgmt
+   ip address 172.16.10.122/24
+!
+interface Vlan20
+   no autostate
+   vrf Test
+   ip address 172.16.20.122/24
+!
+interface Vlan30
+   no autostate
+   vrf Prod
+   ip address 172.16.30.122/24
+!
+interface Vlan40
+   ip address 172.16.40.122/24
+!
+ip routing
+ip routing vrf Mgmt
+ip routing vrf Prod
+ip routing vrf Test
+!
+ip route 0.0.0.0/0 172.16.40.1
+ip route vrf Mgmt 0.0.0.0/0 172.16.10.1
+ip route vrf Prod 0.0.0.0/0 172.16.30.1
+ip route vrf Test 0.0.0.0/0 172.16.20.1
+!
+end
