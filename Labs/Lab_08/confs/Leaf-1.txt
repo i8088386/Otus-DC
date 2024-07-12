@@ -1,0 +1,130 @@
+Leaf-1#sh run
+! Command: show running-config
+! device: Leaf-1 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname Leaf-1
+!
+spanning-tree mode mstp
+!
+vlan 10
+   name Mgmt
+!
+vlan 30
+   name PROD
+!
+vrf instance ADM
+!
+vrf instance DEV
+!
+interface Ethernet1
+   description Spine-1
+   mtu 9000
+   no switchport
+   ip address 10.1.1.1/31
+!
+interface Ethernet2
+   description Spine-2
+   mtu 9000
+   no switchport
+   ip address 10.1.2.1/31
+!
+interface Ethernet3
+   description Mgmt-1
+   switchport access vlan 10
+!
+interface Ethernet4
+   description Prod-1
+   switchport access vlan 30
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Loopback0
+   ip address 10.1.254.1/32
+!
+interface Management1
+!
+interface Vlan10
+   no autostate
+   vrf ADM
+   ip address 172.16.10.1/24
+!
+interface Vlan30
+   no autostate
+   vrf DEV
+   ip address 172.16.30.1/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+   vxlan vlan 10 vni 100010
+   vxlan vlan 30 vni 100030
+   vxlan vrf ADM vni 888
+   vxlan vrf DEV vni 999
+!
+ip virtual-router mac-address 00:00:00:00:11:11
+!
+ip routing
+ip routing vrf ADM
+ip routing vrf DEV
+!
+router bgp 65001
+   router-id 10.1.254.1
+   no bgp default ipv4-unicast
+   timers bgp 1 3
+   maximum-paths 4 ecmp 4
+   neighbor EVPN peer group
+   neighbor EVPN remote-as 65100
+   neighbor EVPN update-source Loopback0
+   neighbor EVPN bfd
+   neighbor EVPN ebgp-multihop 3
+   neighbor EVPN send-community extended
+   neighbor SPINE peer group
+   neighbor SPINE remote-as 65100
+   neighbor SPINE bfd
+   neighbor 10.1.1.0 peer group SPINE
+   neighbor 10.1.2.0 peer group SPINE
+   neighbor 10.1.254.101 peer group EVPN
+   neighbor 10.1.254.102 peer group EVPN
+   !
+   vlan 10
+      rd 65001:10
+      route-target both 10:100010
+      redistribute learned
+   !
+   vlan 30
+      rd 65001:30
+      route-target both 30:100030
+      redistribute learned
+   !
+   address-family evpn
+      neighbor EVPN activate
+   !
+   address-family ipv4
+      neighbor SPINE activate
+      network 10.1.254.1/32
+   !
+   vrf ADM
+      rd 65001:888
+      route-target import evpn 888:888
+      route-target export evpn 888:888
+      redistribute connected
+   !
+   vrf DEV
+      rd 65001:999
+      route-target import evpn 999:999
+      route-target export evpn 999:999
+      redistribute connected
+!
+end
