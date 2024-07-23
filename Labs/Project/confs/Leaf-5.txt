@@ -1,0 +1,166 @@
+BorderLeaf-5#sh run
+! Command: show running-config
+! device: BorderLeaf-5 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname BorderLeaf-5
+!
+spanning-tree mode mstp
+!
+vlan 1010,1030,1100
+!
+vrf instance ADM
+!
+vrf instance DEV
+!
+vrf instance EXT
+!
+interface Ethernet1
+   description Spine-1
+   mtu 9200
+   no switchport
+   ip address 10.1.1.9/31
+!
+interface Ethernet2
+   description Spine-2
+   mtu 9200
+   no switchport
+   ip address 10.1.2.9/31
+!
+interface Ethernet3
+   description Leal-21
+   mtu 9200
+   no switchport
+   ip address 10.0.0.0/31
+!
+interface Ethernet4
+   description Router
+   switchport mode trunk
+   spanning-tree portfast
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Loopback0
+   ip address 10.1.254.5/32
+!
+interface Management1
+!
+interface Vlan1010
+   no autostate
+   vrf ADM
+   ip address 172.16.101.0/31
+!
+interface Vlan1030
+   no autostate
+   vrf DEV
+   ip address 172.16.103.0/31
+!
+interface Vlan1100
+   no autostate
+   vrf EXT
+   ip address 172.16.110.0/31
+!
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+   vxlan vrf ADM vni 111
+   vxlan vrf DEV vni 222
+   vxlan vrf EXT vni 444
+   vxlan vrf STOR vni 333
+!
+ip virtual-router mac-address 00:00:00:00:11:11
+!
+ip routing
+ip routing vrf ADM
+ip routing vrf DEV
+ip routing vrf EXT
+!
+router bgp 65003
+   router-id 10.1.254.5
+   no bgp default ipv4-unicast
+   timers bgp 1 3
+   bgp allowas-in
+   maximum-paths 4 ecmp 4
+   neighbor DCI peer group
+   neighbor DCI remote-as 65201
+   neighbor DCI bfd
+   neighbor DCI-EVPN peer group
+   neighbor DCI-EVPN remote-as 65201
+   neighbor DCI-EVPN next-hop-unchanged
+   neighbor DCI-EVPN update-source Loopback0
+   neighbor DCI-EVPN bfd
+   neighbor DCI-EVPN ebgp-multihop 3
+   neighbor DCI-EVPN send-community extended
+   neighbor EVPN peer group
+   neighbor EVPN remote-as 65100
+   neighbor EVPN next-hop-unchanged
+   neighbor EVPN update-source Loopback0
+   neighbor EVPN bfd
+   neighbor EVPN ebgp-multihop 3
+   neighbor EVPN send-community extended
+   neighbor SPINE peer group
+   neighbor SPINE remote-as 65100
+   neighbor SPINE bfd
+   neighbor 10.0.0.1 peer group DCI
+   neighbor 10.1.1.8 peer group SPINE
+   neighbor 10.1.2.8 peer group SPINE
+   neighbor 10.1.254.101 peer group EVPN
+   neighbor 10.1.254.102 peer group EVPN
+   neighbor 10.2.254.1 peer group DCI-EVPN
+   !
+   address-family evpn
+      neighbor DCI-EVPN activate
+      neighbor EVPN activate
+   !
+   address-family ipv4
+      neighbor DCI activate
+      neighbor SPINE activate
+      network 10.1.254.5/32
+   !
+   vrf ADM
+      rd 65003:111
+      route-target import evpn 111:111
+      route-target export evpn 111:111
+      bgp allowas-in
+      neighbor 172.16.101.1 remote-as 65099
+      neighbor 172.16.101.1 bfd
+      redistribute connected
+      !
+      address-family ipv4
+         neighbor 172.16.101.1 activate
+   !
+   vrf DEV
+      rd 65003:222
+      route-target import evpn 222:222
+      route-target export evpn 222:222
+      bgp allowas-in
+      neighbor 172.16.103.1 remote-as 65099
+      neighbor 172.16.103.1 bfd
+      redistribute connected
+      !
+      address-family ipv4
+         neighbor 172.16.103.1 activate
+   !
+   vrf EXT
+      rd 65003:444
+      route-target import evpn 444:444
+      route-target export evpn 444:444
+      neighbor 172.16.110.1 remote-as 65099
+      neighbor 172.16.110.1 bfd
+      redistribute connected
+      !
+      address-family ipv4
+         neighbor 172.16.110.1 activate
+!
+end

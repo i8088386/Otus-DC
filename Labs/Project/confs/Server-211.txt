@@ -1,0 +1,73 @@
+Sercer-211#sh run
+! Command: show running-config
+! device: Sercer-211 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname Sercer-211
+!
+spanning-tree mode mstp
+!
+vlan 10,30,50,200
+!
+vrf instance V10
+!
+vrf instance V200
+!
+vrf instance V30
+!
+vrf instance V50
+!
+interface Ethernet1
+   switchport mode trunk
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Management1
+!
+interface Vlan10
+   no autostate
+   vrf V10
+   ip address 172.16.10.211/24
+!
+interface Vlan30
+   no autostate
+   vrf V30
+   ip address 172.16.30.211/24
+!
+interface Vlan50
+   no autostate
+   vrf V50
+   ip address 172.16.50.211/24
+!
+interface Vlan200
+   no autostate
+   vrf V200
+   ip address 200.0.0.211/24
+!
+ip routing
+ip routing vrf V10
+ip routing vrf V200
+ip routing vrf V30
+ip routing vrf V50
+!
+ip route vrf V10 0.0.0.0/0 172.16.10.1
+ip route vrf V200 0.0.0.0/0 200.0.0.1
+ip route vrf V30 0.0.0.0/0 172.16.30.1
+ip route vrf V50 0.0.0.0/0 172.16.50.1
+!
+end
