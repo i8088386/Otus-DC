@@ -38,7 +38,7 @@
 
 Pod-1:
 
-|Device|IP Lo EVPN / Router-ID |ASn|
+|Device|IP Loopback / Router-ID |ASn|
 |:-:|:-:|:-:|
 |Spine1|10.1.254.101|65100|
 |Spine2|10.1.254.102|65100|
@@ -51,7 +51,7 @@ Pod-1:
 
 Pod-2:
 
-|Device|IP Lo EVPN / Router-ID |ASn|
+|Device|IP Loopback EVPN / Router-ID |ASn|
 |:-:|:-:|:-:|
 |Spine-3|10.2.254.103|65200|
 |Leaf-21|10.2.254.6|652001|
