@@ -1,0 +1,82 @@
+Server-1#sh run
+! Command: show running-config
+! device: Server-1 (vEOS-lab, EOS-4.27.1F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname Server-122
+!
+spanning-tree mode mstp
+!
+vlan 10,20,30,40,50,100
+!
+vrf instance V10
+vrf instance V20
+vrf instance V30
+vrf instance V40
+vrf instance V50
+vrf instance V100
+
+!
+interface Port-Channel10
+   switchport mode trunk
+!
+interface Ethernet1
+   channel-group 10 mode on
+!
+interface Ethernet2
+   channel-group 10 mode on
+
+interface Vlan10
+   no autostate
+   vrf V10
+   ip address 172.16.10.122/24
+!
+interface Vlan20
+   no autostate
+   vrf V20
+   ip address 172.16.20.122/24
+!
+interface Vlan30
+   no autostate
+   vrf V30
+   ip address 172.16.30.122/24
+
+interface Vlan40
+   no autostate
+   vrf V40
+   ip address 172.16.40.122/24
+
+interface Vlan50
+   no autostate
+   vrf V50
+   ip address 172.16.50.122/24
+
+interface Vlan100
+   no autostate
+   vrf V100
+   ip address 100.0.0.122/24
+!
+ip routing
+ip routing vrf V10
+ip routing vrf V20
+ip routing vrf V30
+ip routing vrf V40
+ip routing vrf V50
+ip routing vrf V100
+!
+ip route vrf V10 0.0.0.0/0 172.16.10.1
+ip route vrf V20 0.0.0.0/0 172.16.20.1
+ip route vrf V30 0.0.0.0/0 172.16.30.1
+ip route vrf V40 0.0.0.0/0 172.16.40.1
+ip route vrf V50 0.0.0.0/0 172.16.50.1
+ip route vrf V100 0.0.0.0/0 100.0.0.1
+!
+end
+wr
